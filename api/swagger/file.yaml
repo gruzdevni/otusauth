@@ -1,0 +1,352 @@
+swagger: "2.0"
+info:
+  title: Сервис Otusgruz
+  version: 1.0.0
+  description: API сервиса Otusgruz
+
+schemes:
+  - http
+  - https
+
+basePath: /api
+
+tags:
+  - name: User CRUD
+    description: Создание, изменение, удаление пользователя 
+  - name: Other
+    description: Прочие эндпоинты
+
+paths:
+  /user/{guid}:
+    get:
+      summary: Получение информации по пользователю
+      tags:
+        - User CRUD
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: guid
+          description: guid пользователя
+          required: true
+          type: string
+          format: uuid
+          x-omitempty: false
+          x-nullable: false
+      responses:
+        500:
+          description: Серверная ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+        200:
+          description: Успешное получение данных по пользователю
+          schema:
+            $ref: '#/definitions/UserData'
+    patch:
+      summary: Изменение информации по пользователю
+      tags:
+        - User CRUD
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: guid
+          description: guid пользователя
+          required: true
+          type: string
+          format: uuid
+          x-omitempty: false
+          x-nullable: false
+        - in: body
+          name: request
+          description: Параметры создания пользователя
+          required: true
+          schema:
+            $ref: '#/definitions/UserCreateParams'
+      responses:
+        500:
+          description: Серверная ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+        200:
+          description: Успешное изменение данных по пользователю
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+    delete:
+      summary: Удаление пользователя
+      tags:
+        - User CRUD
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: guid
+          description: guid пользователя
+          required: true
+          type: string
+          format: uuid
+          x-omitempty: false
+          x-nullable: false
+      responses:
+        500:
+          description: Серверная ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+        400:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        200:
+          description: Успешное удаление пользователя
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+  /user:
+    post:
+      summary: Создание пользователя
+      tags:
+        - User CRUD
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: Параметры создания пользователя
+          required: true
+          schema:
+            $ref: '#/definitions/UserCreateParams'
+      responses:
+        500:
+          description: Серверная ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+        200:
+          description: Успешное создание пользователя
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+  /health:
+    get:
+      summary: Пинг сервиса
+      tags:
+        - Other
+      responses:
+        '200':
+          description: Успех
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+        '500':
+          description: Серверная ошибка
+          schema:
+            $ref: '#/definitions/Error'
+  /auth:
+    get:
+      summary: Проверка авторизации пользователя
+      tags:
+        - Other
+      parameters:
+        - name: X-User
+          in: header
+          description: Гуид пользователя
+          type: string
+      responses:
+        '200':
+          description: Успех
+          headers:
+            X-User:
+              description: Гуид пользователя.
+              type: string
+              format: uuid
+        '401':
+          description: Клиентская ошибка
+        '500':
+          description: Серверная ошибка
+          schema:
+            $ref: '#/definitions/Error'
+  /login:
+    post:
+      summary: Логин пользователя
+      tags:
+        - Other
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: Параметры логина
+          required: true
+          schema:
+            $ref: '#/definitions/UserLogin'
+      responses:
+        500:
+          description: Серверная ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+        200:
+          description: Успешный логин
+          headers:
+            X-User:
+              description: Гуид пользователя.
+              type: string
+              format: uuid
+  /signup:
+    post:
+      summary: Регистрация пользователя
+      tags:
+        - Other
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: Параметры логина
+          required: true
+          schema:
+            $ref: '#/definitions/UserLogin'
+      responses:
+        500:
+          description: Серверная ошибка
+          schema:
+            $ref: '#/definitions/Error'
+        200:
+          description: Успешная Регистрация
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
+definitions:
+  UserLogin:
+    type: object
+    description: Параметры логина
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        description: 'Email'
+        format: email
+        x-omitempty: false
+        x-nullable: false
+      password:
+        type: string
+        description: 'Пароль'
+        x-omitempty: false
+        x-nullable: false
+  UserCreateParams:
+    type: object
+    description: Параметры создания пользователя
+    required:
+      - name
+      - occupation
+    properties:
+      name:
+        type: string
+        description: 'Имя пользователя'
+        example: "Дроздобород Эдуард"
+        x-omitempty: false
+        x-nullable: false
+      occupation:
+        type: string
+        description: 'Место работы'
+        example: "МУП ДЭС"
+        x-omitempty: false
+        x-nullable: false
+  UserData:
+    type: object
+    description: Параметры создания пользователя
+    required:
+      - name
+      - occupation
+    properties:
+      guid:
+        type: string
+        format: uuid
+        x-omitempty: false
+        x-nullable: false
+      name:
+        type: string
+        description: 'Имя пользователя'
+        example: "Дроздобород Эдуард"
+        x-omitempty: false
+        x-nullable: false
+      occupation:
+        type: string
+        description: 'Место работы'
+        example: "МУП ДЭС"
+        x-omitempty: false
+        x-nullable: false
+      is_deleted:
+        type: boolean
+        description: 'Признак удален ли пользователь'
+        x-omitempty: false
+        x-nullable: false
+  DefaultStatusResponse:
+    type: object
+    description: Дефолтный положительный ответ
+    required:
+      - message
+      - code
+    properties:
+      code:
+        type: string
+        description: 'Кодовое обозначение ответа'
+        example: "01"
+        x-omitempty: false
+        x-nullable: false
+      message:
+        type: string
+        description: 'Сообщение'
+        example: "Сообщение об успешном выполнении запроса"
+        x-omitempty: false
+        x-nullable: false
+  Error:
+    type: object
+    description: объект ошибки, обязательным является лишь поле сообщения, опционально присутствует код и ряд других полей
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        description: текстовое описание ошибки
+        example: "произошла такая-то ошибка"
+      code:
+        type: integer
+        description: цифровой код ошибки
+        example: 123

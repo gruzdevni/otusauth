@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:  migrate-postgres
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrate-postgres
+        image: nikolaygr/otusauth:v0.1
+        command: ["/otusauth", "postgres", "up"]
+        envFrom:
+         - configMapRef:
+            name: conf-map
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: auth-psql-1-postgresql
+              key: postgres-password
+      restartPolicy: Never   
+  backoffLimit: 4
