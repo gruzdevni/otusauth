@@ -223,7 +223,7 @@ paths:
           schema:
             type: object
             properties:
-              userGuid:
+              user_guid:
                 type: string
                 format: uuid
   /signup:

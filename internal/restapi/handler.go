@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog"
 )
 
 type Handler struct {
@@ -61,13 +62,13 @@ func (h *Handler) Login(params other.PostLoginParams) middleware.Responder {
 
 	authorizedGUID, err := h.authSrv.Login(ctx, loginParams.Email.String(), loginParams.Password)
 	if err != nil {
-		if errors.Is(err, auth.ErrNotCorrectData) {
-			return other.NewPostLoginUnauthorized().WithPayload(&models.DefaultStatusResponse{Message: auth.ErrNotCorrectData.Error()})
+		if errors.Is(err, auth.ErrNotCorrectData) || errors.Is(err, auth.ErrNotRegistered) {
+			return other.NewPostLoginUnauthorized().WithPayload(&models.DefaultStatusResponse{Message: err.Error()})
 		}
 
 		return other.NewPostLoginInternalServerError().WithPayload(&models.DefaultStatusResponse{Message: err.Error()})
 	}
-
+	zerolog.Ctx(ctx).Info().Any("response", &other.PostLoginOKBody{UserGUID: strfmt.UUID(authorizedGUID.String())}).Msg("prepared response")
 	return other.NewPostLoginOK().WithPayload(&other.PostLoginOKBody{UserGUID: strfmt.UUID(authorizedGUID.String())})
 }
 

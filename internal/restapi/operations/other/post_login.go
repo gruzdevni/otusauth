@@ -65,9 +65,9 @@ func (o *PostLogin) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 // swagger:model PostLoginOKBody
 type PostLoginOKBody struct {
 
-	// user Guid
+	// user guid
 	// Format: uuid
-	UserGUID strfmt.UUID `json:"userGuid,omitempty"`
+	UserGUID strfmt.UUID `json:"user_guid,omitempty"`
 }
 
 // Validate validates this post login o k body
@@ -89,7 +89,7 @@ func (o *PostLoginOKBody) validateUserGUID(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := validate.FormatOf("postLoginOK"+"."+"userGuid", "body", "uuid", o.UserGUID.String(), formats); err != nil {
+	if err := validate.FormatOf("postLoginOK"+"."+"user_guid", "body", "uuid", o.UserGUID.String(), formats); err != nil {
 		return err
 	}
 

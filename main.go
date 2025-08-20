@@ -16,9 +16,9 @@ func main() {
 		panic(err)
 	}
 
-	ctx := context.Background()
-
 	logger := zerolog.New(os.Stdout).With().Timestamp().Caller().Logger()
+
+	ctx := logger.WithContext(context.Background())
 
 	exitCode := 0
 

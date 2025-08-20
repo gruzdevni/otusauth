@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: migrate-postgres
-        image: nikolaygr/otusauth:v0.2
+        image: nikolaygr/otusauth:v0.6
         command: ["/otusauth", "postgres", "up"]
         envFrom:
          - configMapRef:

@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 	"golang.org/x/crypto/bcrypt"
 
@@ -16,6 +17,7 @@ import (
 var (
 	ErrNotCorrectData   = errors.New("Not correct password or email")
 	ErrEmailAlreadyUsed = errors.New("Email is already registered. Please login")
+	ErrNotRegistered    = errors.New("No such email. Please sign up")
 )
 
 type repo interface {
@@ -55,22 +57,27 @@ func (s *service) Auth(ctx context.Context, guid uuid.UUID) (uuid.UUID, error) {
 }
 
 func (s *service) Login(ctx context.Context, email string, pwd string) (uuid.UUID, error) {
+	zerolog.Ctx(ctx).Info().Msg("entered into login method")
 	user, err := s.repo.GetUserByEmail(ctx, email)
 	if err != nil {
+		zerolog.Ctx(ctx).Info().Msg("error present")
 		if err == sql.ErrNoRows {
-			return uuid.Nil, nil
+			zerolog.Ctx(ctx).Info().Msg("not registered")
+			return uuid.Nil, ErrNotRegistered
 		}
-
+		zerolog.Ctx(ctx).Err(err).Msg("another error")
 		return uuid.Nil, fmt.Errorf("getting user by email: %w", err)
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Pwd), []byte(pwd))
 	if err != nil {
+		zerolog.Ctx(ctx).Err(ErrNotCorrectData).Msg("another error")
 		return uuid.Nil, ErrNotCorrectData
 	}
 
 	err = s.repo.InsertSession(ctx, user.Guid)
 	if err != nil {
+		zerolog.Ctx(ctx).Err(err).Msg("inserting session")
 		return uuid.Nil, fmt.Errorf("inserting session: %w", err)
 	}
 
