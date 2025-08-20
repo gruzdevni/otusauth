@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: auth-app
-        image: nikolaygr/otusauth:v0.1
+        image: nikolaygr/otusauth:v0.2
         envFrom:
          - configMapRef:
             name: conf-map
