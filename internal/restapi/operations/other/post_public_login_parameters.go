@@ -17,19 +17,19 @@ import (
 	"otusauth/internal/models"
 )
 
-// NewPostSignupParams creates a new PostSignupParams object
+// NewPostPublicLoginParams creates a new PostPublicLoginParams object
 //
 // There are no default values defined in the spec.
-func NewPostSignupParams() PostSignupParams {
+func NewPostPublicLoginParams() PostPublicLoginParams {
 
-	return PostSignupParams{}
+	return PostPublicLoginParams{}
 }
 
-// PostSignupParams contains all the bound params for the post signup operation
+// PostPublicLoginParams contains all the bound params for the post public login operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters PostSignup
-type PostSignupParams struct {
+// swagger:parameters PostPublicLogin
+type PostPublicLoginParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -44,8 +44,8 @@ type PostSignupParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewPostSignupParams() beforehand.
-func (o *PostSignupParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewPostPublicLoginParams() beforehand.
+func (o *PostPublicLoginParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r

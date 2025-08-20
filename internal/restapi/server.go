@@ -24,7 +24,7 @@ import (
 	flags "github.com/jessevdk/go-flags"
 	"golang.org/x/net/netutil"
 
-	"otusgruz/internal/restapi/operations"
+	"otusauth/internal/restapi/operations"
 )
 
 const (

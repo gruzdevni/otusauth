@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/validate"
 
-	"otusgruz/internal/models"
+	"otusauth/internal/models"
 )
 
 // NewPatchUserGUIDParams creates a new PatchUserGUIDParams object

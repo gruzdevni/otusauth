@@ -10,8 +10,8 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
-	"otusgruz/internal/restapi/operations"
-	"otusgruz/internal/restapi/operations/other"
+	"otusauth/internal/restapi/operations"
+	"otusauth/internal/restapi/operations/other"
 )
 
 //go:generate swagger generate server --target ../../internal --name RestServer --spec ../../api/swagger/file.yaml --principal interface{} --exclude-main --exclude-spec

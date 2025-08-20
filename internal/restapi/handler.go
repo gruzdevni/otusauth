@@ -3,11 +3,11 @@ package restapi
 import (
 	"errors"
 
-	"otusgruz/internal/models"
-	"otusgruz/internal/restapi/operations/other"
-	"otusgruz/internal/restapi/operations/user_c_r_u_d"
-	"otusgruz/internal/service/api/auth"
-	"otusgruz/internal/service/api/user"
+	"otusauth/internal/models"
+	"otusauth/internal/restapi/operations/other"
+	"otusauth/internal/restapi/operations/user_c_r_u_d"
+	"otusauth/internal/service/api/auth"
+	"otusauth/internal/service/api/user"
 
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
@@ -65,10 +65,10 @@ func (h *Handler) Login(params other.PostLoginParams) middleware.Responder {
 			return other.NewPostLoginUnauthorized().WithPayload(&models.DefaultStatusResponse{Message: auth.ErrNotCorrectData.Error()})
 		}
 
-		return other.NewPostLoginInternalServerError()
+		return other.NewPostLoginInternalServerError().WithPayload(&models.DefaultStatusResponse{Message: err.Error()})
 	}
 
-	return other.NewPostLoginOK().WithXUser(strfmt.UUID(authorizedGUID.String()))
+	return other.NewPostLoginOK().WithPayload(&other.PostLoginOKBody{UserGUID: strfmt.UUID(authorizedGUID.String())})
 }
 
 func (h *Handler) Signup(params other.PostSignupParams) middleware.Responder {

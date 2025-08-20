@@ -10,7 +10,7 @@ import (
 	"github.com/samber/lo"
 	"golang.org/x/crypto/bcrypt"
 
-	query "otusgruz/internal/repo"
+	query "otusauth/internal/repo"
 )
 
 var (

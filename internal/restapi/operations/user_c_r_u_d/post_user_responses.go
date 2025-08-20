@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"otusgruz/internal/models"
+	"otusauth/internal/models"
 )
 
 // PostUserOKCode is the HTTP code returned for type PostUserOK

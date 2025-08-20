@@ -3,7 +3,7 @@ package build
 import (
 	"database/sql"
 
-	repo "otusgruz/internal/repo"
+	repo "otusauth/internal/repo"
 )
 
 func (b *Builder) NewRepo(db *sql.DB) *repo.Queries {

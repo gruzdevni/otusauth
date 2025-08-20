@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"otusgruz/internal/restapi"
-	"otusgruz/internal/restapi/operations"
-	"otusgruz/internal/restapi/operations/other"
-	"otusgruz/internal/restapi/operations/user_c_r_u_d"
-	"otusgruz/internal/service/api/auth"
-	"otusgruz/internal/service/api/user"
+	"otusauth/internal/restapi"
+	"otusauth/internal/restapi/operations"
+	"otusauth/internal/restapi/operations/other"
+	"otusauth/internal/restapi/operations/user_c_r_u_d"
+	"otusauth/internal/service/api/auth"
+	"otusauth/internal/service/api/user"
 
-	authMW "otusgruz/pkg/http"
+	httpMW "otusauth/pkg/http"
 
 	"github.com/go-openapi/loads"
 	mdlwr "github.com/go-openapi/runtime/middleware"
@@ -90,9 +90,10 @@ func (b *Builder) RestAPIServer(ctx context.Context) (*http.Server, error) {
 		return nil, fmt.Errorf("creating metrics middleware: %w", err)
 	}
 
-	authMW := authMW.NewAuthMiddleware()
+	authMW := httpMW.NewAuthMiddleware()
 
 	apiRouter.Use(metricsMW)
+	apiRouter.Use(httpMW.HTTPRequestBodyLoggerWithContext(ctx))
 	apiRouter.Use(authMW.UserAuthorizationMiddleware)
 
 	swaggerUIOpts := mdlwr.SwaggerUIOpts{ //nolint:exhaustruct

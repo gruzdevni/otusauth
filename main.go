@@ -4,8 +4,8 @@ import (
 	"context"
 	"os"
 
-	"otusgruz/cmd"
-	"otusgruz/config"
+	"otusauth/cmd"
+	"otusauth/config"
 
 	"github.com/rs/zerolog"
 )

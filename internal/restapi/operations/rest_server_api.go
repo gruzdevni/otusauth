@@ -19,8 +19,8 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"otusgruz/internal/restapi/operations/other"
-	"otusgruz/internal/restapi/operations/user_c_r_u_d"
+	"otusauth/internal/restapi/operations/other"
+	"otusauth/internal/restapi/operations/user_c_r_u_d"
 )
 
 // NewRestServerAPI creates a new RestServer instance
@@ -72,7 +72,7 @@ func NewRestServerAPI(spec *loads.Document) *RestServerAPI {
 	}
 }
 
-/*RestServerAPI API сервиса Otusgruz */
+/*RestServerAPI API сервиса otusauth */
 type RestServerAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context

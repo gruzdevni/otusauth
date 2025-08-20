@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/validate"
 
-	"otusgruz/internal/models"
+	"otusauth/internal/models"
 )
 
 // NewPostUserParams creates a new PostUserParams object

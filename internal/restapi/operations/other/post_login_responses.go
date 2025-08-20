@@ -9,9 +9,8 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/strfmt"
 
-	"otusgruz/internal/models"
+	"otusauth/internal/models"
 )
 
 // PostLoginOKCode is the HTTP code returned for type PostLoginOK
@@ -23,10 +22,11 @@ PostLoginOK Успешный логин
 swagger:response postLoginOK
 */
 type PostLoginOK struct {
-	/*Гуид пользователя.
 
-	 */
-	XUser strfmt.UUID `json:"X-User"`
+	/*
+	  In: Body
+	*/
+	Payload *PostLoginOKBody `json:"body,omitempty"`
 }
 
 // NewPostLoginOK creates PostLoginOK with default headers values
@@ -35,30 +35,27 @@ func NewPostLoginOK() *PostLoginOK {
 	return &PostLoginOK{}
 }
 
-// WithXUser adds the xUser to the post login o k response
-func (o *PostLoginOK) WithXUser(xUser strfmt.UUID) *PostLoginOK {
-	o.XUser = xUser
+// WithPayload adds the payload to the post login o k response
+func (o *PostLoginOK) WithPayload(payload *PostLoginOKBody) *PostLoginOK {
+	o.Payload = payload
 	return o
 }
 
-// SetXUser sets the xUser to the post login o k response
-func (o *PostLoginOK) SetXUser(xUser strfmt.UUID) {
-	o.XUser = xUser
+// SetPayload sets the payload to the post login o k response
+func (o *PostLoginOK) SetPayload(payload *PostLoginOKBody) {
+	o.Payload = payload
 }
 
 // WriteResponse to the client
 func (o *PostLoginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
-	// response header X-User
-
-	xUser := o.XUser.String()
-	if xUser != "" {
-		rw.Header().Set("X-User", xUser)
-	}
-
-	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
-
 	rw.WriteHeader(200)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
 }
 
 // PostLoginUnauthorizedCode is the HTTP code returned for type PostLoginUnauthorized
@@ -119,7 +116,7 @@ type PostLoginInternalServerError struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Error `json:"body,omitempty"`
+	Payload *models.DefaultStatusResponse `json:"body,omitempty"`
 }
 
 // NewPostLoginInternalServerError creates PostLoginInternalServerError with default headers values
@@ -129,13 +126,13 @@ func NewPostLoginInternalServerError() *PostLoginInternalServerError {
 }
 
 // WithPayload adds the payload to the post login internal server error response
-func (o *PostLoginInternalServerError) WithPayload(payload *models.Error) *PostLoginInternalServerError {
+func (o *PostLoginInternalServerError) WithPayload(payload *models.DefaultStatusResponse) *PostLoginInternalServerError {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post login internal server error response
-func (o *PostLoginInternalServerError) SetPayload(payload *models.Error) {
+func (o *PostLoginInternalServerError) SetPayload(payload *models.DefaultStatusResponse) {
 	o.Payload = payload
 }
 

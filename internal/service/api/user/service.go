@@ -8,9 +8,9 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/google/uuid"
 
-	"otusgruz/internal/models"
-	query "otusgruz/internal/repo"
-	"otusgruz/pkg/http"
+	"otusauth/internal/models"
+	query "otusauth/internal/repo"
+	"otusauth/pkg/http"
 )
 
 var ErrNoPermission = errors.New("No permission to perform action")

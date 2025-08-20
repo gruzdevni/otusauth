@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"otusgruz/internal/models"
+	"otusauth/internal/models"
 )
 
 // PatchUserGUIDOKCode is the HTTP code returned for type PatchUserGUIDOK

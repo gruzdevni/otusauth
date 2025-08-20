@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"otusgruz/internal/models"
+	"otusauth/internal/models"
 )
 
 // GetAuthOKCode is the HTTP code returned for type GetAuthOK

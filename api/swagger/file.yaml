@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  title: Сервис Otusgruz
+  title: Сервис otusauth
   version: 1.0.0
-  description: API сервиса Otusgruz
+  description: API сервиса otusauth
 
 schemes:
   - http
@@ -213,18 +213,19 @@ paths:
         500:
           description: Серверная ошибка
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/DefaultStatusResponse'
         401:
           description: Клиентская ошибка
           schema:
             $ref: '#/definitions/DefaultStatusResponse'
         200:
           description: Успешный логин
-          headers:
-            X-User:
-              description: Гуид пользователя.
-              type: string
-              format: uuid
+          schema:
+            type: object
+            properties:
+              userGuid:
+                type: string
+                format: uuid
   /signup:
     post:
       summary: Регистрация пользователя

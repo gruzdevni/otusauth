@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"otusgruz/config"
+	"otusauth/config"
 
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"

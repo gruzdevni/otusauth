@@ -1,7 +1,7 @@
 package build
 
 import (
-	"otusgruz/internal/migration"
+	"otusauth/internal/migration"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres" // driver
