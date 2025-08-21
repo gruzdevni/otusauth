@@ -34,7 +34,7 @@ type service struct {
 type Service interface {
 	Auth(ctx context.Context, guid uuid.UUID) (uuid.UUID, error)
 	Login(ctx context.Context, email string, pwd string) (uuid.UUID, error)
-	Singup(ctx context.Context, email string, pwd string) error
+	Singup(ctx context.Context, email string, pwd string) (uuid.UUID, error)
 }
 
 func NewService(repo repo) Service {
@@ -84,31 +84,33 @@ func (s *service) Login(ctx context.Context, email string, pwd string) (uuid.UUI
 	return user.Guid, nil
 }
 
-func (s *service) Singup(ctx context.Context, email string, pwd string) error {
+func (s *service) Singup(ctx context.Context, email string, pwd string) (uuid.UUID, error) {
 	user, err := s.repo.GetUserByEmail(ctx, email)
 	if err != nil && err != sql.ErrNoRows {
-		return fmt.Errorf("getting user by email: %w", err)
+		return uuid.Nil, fmt.Errorf("getting user by email: %w", err)
 	}
 
 	if !lo.IsEmpty(user) {
-		return ErrEmailAlreadyUsed
+		return uuid.Nil, ErrEmailAlreadyUsed
 	}
 
 	hashedPwd, err := bcrypt.GenerateFromPassword([]byte(pwd), 8)
 	if err != nil {
-		return fmt.Errorf("encrypting password: %w", err)
+		return uuid.Nil, fmt.Errorf("encrypting password: %w", err)
 	}
 
+	userGUID := uuid.New()
+
 	err = s.repo.InsertUser(ctx, query.InsertUserParams{
-		Guid:       uuid.New(),
+		Guid:       userGUID,
 		Occupation: "",
 		Name:       "",
 		Email:      email,
 		Pwd:        string(hashedPwd),
 	})
 	if err != nil {
-		return fmt.Errorf("inserting user: %w", err)
+		return uuid.Nil, fmt.Errorf("inserting user: %w", err)
 	}
 
-	return nil
+	return userGUID, nil
 }

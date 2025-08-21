@@ -6,9 +6,14 @@ package other
 // Editing this file might prove futile when you re-run the generate command
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // PostSignupHandlerFunc turns a function with the right signature into a post signup handler
@@ -53,4 +58,63 @@ func (o *PostSignup) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	res := o.Handler.Handle(Params) // actually handle the request
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
+}
+
+// PostSignupOKBody post signup o k body
+//
+// swagger:model PostSignupOKBody
+type PostSignupOKBody struct {
+
+	// user guid
+	// Format: uuid
+	UserGUID strfmt.UUID `json:"user_guid,omitempty"`
+}
+
+// Validate validates this post signup o k body
+func (o *PostSignupOKBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.validateUserGUID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *PostSignupOKBody) validateUserGUID(formats strfmt.Registry) error {
+	if swag.IsZero(o.UserGUID) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("postSignupOK"+"."+"user_guid", "body", "uuid", o.UserGUID.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validates this post signup o k body based on context it is used
+func (o *PostSignupOKBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *PostSignupOKBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *PostSignupOKBody) UnmarshalBinary(b []byte) error {
+	var res PostSignupOKBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
+	return nil
 }

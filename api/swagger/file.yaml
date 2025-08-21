@@ -247,10 +247,18 @@ paths:
           description: Серверная ошибка
           schema:
             $ref: '#/definitions/Error'
+        403:
+          description: Клиентская ошибка
+          schema:
+            $ref: '#/definitions/DefaultStatusResponse'
         200:
           description: Успешная Регистрация
           schema:
-            $ref: '#/definitions/DefaultStatusResponse'
+            type: object
+            properties:
+              user_guid:
+                type: string
+                format: uuid
 definitions:
   UserLogin:
     type: object

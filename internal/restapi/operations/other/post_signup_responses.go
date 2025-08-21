@@ -26,7 +26,7 @@ type PostSignupOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.DefaultStatusResponse `json:"body,omitempty"`
+	Payload *PostSignupOKBody `json:"body,omitempty"`
 }
 
 // NewPostSignupOK creates PostSignupOK with default headers values
@@ -36,13 +36,13 @@ func NewPostSignupOK() *PostSignupOK {
 }
 
 // WithPayload adds the payload to the post signup o k response
-func (o *PostSignupOK) WithPayload(payload *models.DefaultStatusResponse) *PostSignupOK {
+func (o *PostSignupOK) WithPayload(payload *PostSignupOKBody) *PostSignupOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post signup o k response
-func (o *PostSignupOK) SetPayload(payload *models.DefaultStatusResponse) {
+func (o *PostSignupOK) SetPayload(payload *PostSignupOKBody) {
 	o.Payload = payload
 }
 
@@ -50,6 +50,51 @@ func (o *PostSignupOK) SetPayload(payload *models.DefaultStatusResponse) {
 func (o *PostSignupOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
+// PostSignupForbiddenCode is the HTTP code returned for type PostSignupForbidden
+const PostSignupForbiddenCode int = 403
+
+/*
+PostSignupForbidden Клиентская ошибка
+
+swagger:response postSignupForbidden
+*/
+type PostSignupForbidden struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.DefaultStatusResponse `json:"body,omitempty"`
+}
+
+// NewPostSignupForbidden creates PostSignupForbidden with default headers values
+func NewPostSignupForbidden() *PostSignupForbidden {
+
+	return &PostSignupForbidden{}
+}
+
+// WithPayload adds the payload to the post signup forbidden response
+func (o *PostSignupForbidden) WithPayload(payload *models.DefaultStatusResponse) *PostSignupForbidden {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the post signup forbidden response
+func (o *PostSignupForbidden) SetPayload(payload *models.DefaultStatusResponse) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *PostSignupForbidden) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(403)
 	if o.Payload != nil {
 		payload := o.Payload
 		if err := producer.Produce(rw, payload); err != nil {

@@ -77,16 +77,16 @@ func (h *Handler) Signup(params other.PostSignupParams) middleware.Responder {
 
 	regParams := params.Request
 
-	err := h.authSrv.Singup(ctx, regParams.Email.String(), regParams.Password)
+	userGUID, err := h.authSrv.Singup(ctx, regParams.Email.String(), regParams.Password)
 	if err != nil {
 		if errors.Is(err, auth.ErrEmailAlreadyUsed) {
-			return other.NewPostSignupOK().WithPayload(&models.DefaultStatusResponse{Message: auth.ErrEmailAlreadyUsed.Error()})
+			return other.NewPostSignupForbidden().WithPayload(&models.DefaultStatusResponse{Message: auth.ErrEmailAlreadyUsed.Error()})
 		}
 
 		return other.NewPostSignupInternalServerError()
 	}
 
-	return other.NewPostSignupOK()
+	return other.NewPostSignupOK().WithPayload(&other.PostSignupOKBody{UserGUID: strfmt.UUID(userGUID.String())})
 }
 
 func (h *Handler) GetUser(params user_c_r_u_d.GetUserGUIDParams) middleware.Responder {
