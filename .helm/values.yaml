@@ -1,0 +1,29 @@
+authDp:
+  authApp:
+    image:
+      repository: nikolaygr/otusauth
+      tag: v0.7
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+authServiceLb:
+  ports:
+  - name: web
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  type: LoadBalancer
+confMap:
+  postgresDbName: postgres
+  postgresPort: "5432"
+  postgresUser: postgres
+kubernetesClusterDomain: cluster.local
+migratePostgres:
+  backoffLimit: 4
+  migratePostgres:
+    image:
+      repository: nikolaygr/otusauth
+      tag: v0.7
